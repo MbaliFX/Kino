@@ -1,26 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="12dp"
+    android:background="@color/white"
+    android:padding="16dp"
     tools:context=".Settings">
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Settings"
-        android:textStyle="bold"/>
-    
+        android:orientation="vertical"
+        android:paddingBottom="32dp">
 
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/black"
-        android:textColor="@color/white"
-        android:text="logout"/>
+        <!-- Settings Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="settings"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:paddingBottom="4dp" />
 
-</LinearLayout>
+        <!-- Welcome Message (below Settings) -->
+        <TextView
+            android:id="@+id/txtWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="welcome"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingBottom="16dp" />
+
+        <!-- 1. Dark Mode Toggle -->
+        <Switch
+            android:id="@+id/switchDarkMode"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:minHeight="48dp"
+            android:padding="8dp"
+            android:text="enable_dark_mode"
+            tools:ignore="UseSwitchCompatOrMaterialXml,VisualLintButtonSize" />
+
+        <!-- 2. Notification Toggle -->
+        <Switch
+            android:id="@+id/switchNotifications"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:minHeight="48dp"
+            android:padding="8dp"
+            android:text="enable notifications"
+            tools:ignore="UseSwitchCompatOrMaterialXml,VisualLintButtonSize" />
+
+        <!-- 3. Change Username -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="change username"
+            android:paddingTop="16dp" />
+
+        <EditText
+            android:id="@+id/editUsername"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:minHeight="48dp"
+            android:hint="enter your name"
+            android:padding="8dp"
+            android:background="@android:drawable/editbox_background"
+            tools:ignore="Autofill,TextFields,VisualLintTextFieldSize" />
+
+        <Button
+            android:id="@+id/btnSaveUsername"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:minHeight="48dp"
+            android:text="save username"
+            android:backgroundTint="@color/black"
+            android:textColor="@color/white"
+            android:layout_marginTop="8dp"
+            tools:ignore="VisualLintButtonSize" />
+
+        <!-- 4. Language Selection -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="select language"
+            android:paddingTop="16dp" />
+
+        <Spinner
+            android:id="@+id/spinnerLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:minHeight="48dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- 5. Clear Data Button -->
+        <Button
+            android:id="@+id/btnClearData"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:minHeight="48dp"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/black"
+            android:text="clear app data"
+            android:textColor="@color/white"
+            tools:ignore="VisualLintButtonSize" />
+
+        <!-- 6. Logout Button -->
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:minHeight="48dp"
+            android:text="logout"
+            android:backgroundTint="@color/black"
+            android:textColor="@color/white"
+            android:layout_marginTop="16dp"
+            tools:ignore="VisualLintButtonSize" />
+
+    </LinearLayout>
+</ScrollView>

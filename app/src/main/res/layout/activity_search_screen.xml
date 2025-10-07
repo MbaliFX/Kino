@@ -9,14 +9,11 @@
     android:background="@drawable/background"
     tools:context=".SearchScreen">
 
-    <!-- 2. Add a simple View that acts as the dark tint. It covers the background. -->
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/dark_tint" />
 
-    <!-- 3. Your original LinearLayout now goes inside the FrameLayout.
-         It has no background itself and holds all your content. -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
