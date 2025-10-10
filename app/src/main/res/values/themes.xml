@@ -1,35 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- 1. Define a shape style for sharp corners -->
-    <style name="ShapeAppearance.App.Sharp" parent="">
-        <item name="cornerSize">0dp</item>
-    </style>
-
-    <!-- 2. Create a custom button style that uses the sharp shape -->
-    <style name="MySharpButtonStyle" parent="Widget.Material3.Button">
-        <item name="shapeAppearance">@style/ShapeAppearance.App.Sharp</item>
-    </style>
-
-    <!-- 3. Base application theme. All customizations go here. -->
-    <style name="Base.Theme.Kino" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
+    <!-- Base application theme for LIGHT mode. -->
+    <style name="Base.Theme.Kino" parent="Theme.Material3.DayNight.NoActionBar"><!-- Primary brand color (backgrounds, action bars) -->
         <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryVariant">#E4E4E4</item>
-        <item name="colorOnPrimary">@color/black</item> <!-- Text on a white button should be black -->
+        <item name="colorOnPrimary">@color/black</item> <!-- Text/icons on top of Primary color -->
 
-        <!-- Secondary brand color. -->
+        <!-- Secondary brand color (accents, highlights, interactive elements) -->
         <item name="colorSecondary">@color/blue</item>
-        <item name="colorSecondaryVariant">#00BCD4</item>
-        <item name="colorOnSecondary">@color/white</item> <!-- Text on a blue button should be white -->
+        <item name="colorOnSecondary">@color/white</item> <!-- Text/icons on top of Secondary color -->
 
-        <!-- Status bar color. Set to a light gray to see the icons. -->
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <!-- Background color for the entire app -->
+        <item name="android:windowBackground">@color/white</item>
 
-        <!-- 4. Apply your custom button style to the whole app -->
-        <item name="materialButtonStyle">@style/MySharpButtonStyle</item>
+        <!-- Text colors -->
+        <item name="android:textColor">@color/black</item> <!-- Default text color -->
+        <item name="android:textColorHint">#808080</item> <!-- Hint text color (e.g., "Search...") -->
+
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item> <!-- Makes status bar icons (time, battery) dark -->
     </style>
 
-    <!-- 5. The final theme for your app, which inherits everything -->
+    <!-- The final theme for your app, which inherits everything -->
     <style name="Theme.Kino" parent="Base.Theme.Kino" />
 
 </resources>

@@ -3,92 +3,180 @@ package com.example.kino
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.enableEdgeToEdge
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kino.model.Movie
+import com.example.kino.model.MovieDetail
 import com.example.kino.model.MovieResponse
+import com.example.kino.model.TMDbResponse
 import com.example.kino.network.RetrofitInstance
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.jvm.java
 
 class Homescreen : AppCompatActivity() {
 
     private lateinit var adapter: MovieAdapter
-    private val trendingTitles = listOf("Inception", "The Matrix", "Avatar", "Interstellar", "Titanic", "Avengers")
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var searchView: SearchView
+    private lateinit var toolbar: Toolbar
+    private lateinit var logoButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_homescreen)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        // Initialize Views
+        toolbar = findViewById(R.id.toolbar)
+        recyclerView = findViewById(R.id.movieRecyclerView)
+        searchView = findViewById(R.id.search_view)
+        logoButton = findViewById(R.id.logo_button)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.movieRecyclerView)
+        // Setup Toolbar
+        setSupportActionBar(toolbar)
+
+        // Setup other components
+        setupRecyclerView()
+        setupSearchView()
+        setupLogoButton()
+
+        // Check if we received a search query from another screen
+        val searchQuery = intent.getStringExtra("SEARCH_QUERY")
+        if (!searchQuery.isNullOrBlank()) {
+            searchView.setQuery(searchQuery, true) // Set query and submit
+        } else {
+            // Otherwise, load popular movies automatically
+            loadPopularMovies()
+        }
+    }
+
+    // --- Toolbar and Menu Methods ---
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar.
+        menuInflater.inflate(R.menu.menu_homescreen, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle menu item clicks
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                // Navigate to Settings activity
+                val intent = Intent(this, Settings::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    // --- Setup Methods ---
+
+    private fun setupLogoButton() {
+        logoButton.setOnClickListener {
+            // Navigate back to the SearchScreen
+            val intent = Intent(this, SearchScreen::class.java)
+            // Clear the activity stack so the user doesn't get stuck in a loop
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            finish() // Close the Homescreen
+        }
+    }
+
+    private fun setupRecyclerView() {
         adapter = MovieAdapter(emptyList()) { movie ->
-            // Open movie details
-            val intent = Intent(this, MovieDetailActivity::class.java)
-            intent.putExtra("movieTitle", movie.Title)
-            intent.putExtra("movieYear", movie.Year)
-            intent.putExtra("moviePoster", movie.Poster)
-            intent.putExtra("moviePlot", movie.Plot)
+            val intent = Intent(this, MovieDetailActivity::class.java).apply {
+                putExtra("movieTitle", movie.title)
+                putExtra("movieYear", movie.year)
+                putExtra("moviePoster", movie.poster)
+                putExtra("imdbID", movie.imdbID)
+            }
             startActivity(intent)
         }
-
-        recyclerView.layoutManager = GridLayoutManager(this, 3) // 3 posters per row
+        recyclerView.layoutManager = GridLayoutManager(this, 3)
         recyclerView.adapter = adapter
+    }
 
-        // Load trending movies automatically
-        loadTrendingMovies()
+    private fun setupSearchView() {
+        // Replace the default close icon with the search icon
+        val searchCloseIcon = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+        searchCloseIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.search_icon))
 
-        // Search functionality
-        val searchView: SearchView = findViewById(R.id.search_view)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { searchMovie(it) }
+                searchView.clearFocus() // Hide keyboard
+                if (!query.isNullOrBlank()) {
+                    searchOmdbMovies(query)
+                }
                 return true
             }
-            override fun onQueryTextChange(newText: String?): Boolean = false
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // When text is cleared, show popular movies again
+                if (newText.isNullOrBlank()) {
+                    loadPopularMovies()
+                }
+                return true
+            }
         })
     }
 
-    private fun loadTrendingMovies() {
-        val movies = mutableListOf<MovieResponse>()
-        trendingTitles.forEach { title ->
-            RetrofitInstance.api.getMovieByTitle(title).enqueue(object : Callback<MovieResponse> {
-                override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
-                    response.body()?.let { movie ->
-                        movies.add(movie)
-                        adapter.updateMovies(movies)
+    // --- Data Loading Methods ---
+
+    private fun loadPopularMovies() {
+        RetrofitInstance.tmdbApi.getPopularMovies().enqueue(object : Callback<TMDbResponse> {
+            override fun onResponse(call: Call<TMDbResponse>, response: Response<TMDbResponse>) {
+                if (response.isSuccessful) {
+                    val tmdbMovies = response.body()?.results ?: emptyList()
+                    val movies = tmdbMovies.map { tmdbMovie ->
+                        Movie(
+                            title = tmdbMovie.title,
+                            year = tmdbMovie.releaseDate.substringBefore("-"),
+                            imdbID = null,
+                            poster = tmdbMovie.getFullPosterUrl()
+                        )
                     }
-                }
-                override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                    Log.e("KinoAPI", "Error loading trending: ${t.message}")
-                }
-            })
-        }
-    }
-
-    private fun searchMovie(query: String) {
-        RetrofitInstance.api.getMovieByTitle(query).enqueue(object : Callback<MovieResponse> {
-            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
-                response.body()?.let { movie ->
-                    // Replace the current list with the search result
-                    adapter.updateMovies(listOf(movie))
+                    adapter.updateMovies(movies)
+                } else {
+                    Log.e("KinoAPI", "TMDb API Error: ${response.code()}")
                 }
             }
-            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                Log.e("KinoAPI", "Search Error: ${t.message}")
+
+            override fun onFailure(call: Call<TMDbResponse>, t: Throwable) {
+                Log.e("KinoAPI", "TMDb Network Failure: ${t.message}")
             }
         })
     }
+
+    // In Homescreen.kt
+// ...
+    private fun searchOmdbMovies(query: String) {
+        // CORRECTED: The Callback now correctly uses MovieResponse
+        RetrofitInstance.omdbApi.searchMovies(query).enqueue(object : Callback<MovieResponse> {
+            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
+                if (response.isSuccessful && response.body()?.Response == "True") {
+                    // This now works because MovieResponse has a 'Search' property
+                    val movies = response.body()?.Search ?: emptyList()
+                    adapter.updateMovies(movies)
+                } else {
+                    Log.e("KinoAPI", "OMDB Search Error: ${response.body()?.Error}")
+                    adapter.updateMovies(emptyList()) // Clear list if no results
+                }
+            }
+
+            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
+                Log.e("KinoAPI", "OMDB Network Failure: ${t.message}")
+            }
+        })
+    }
+//...
+
 }

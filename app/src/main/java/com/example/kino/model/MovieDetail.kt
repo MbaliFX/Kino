@@ -1,6 +1,7 @@
+// In model/MovieDetail.kt
 package com.example.kino.model
 
-data class MovieResponse(
+data class MovieDetail( // The class name is now MovieDetail
     val Title: String?,
     val Year: String?,
     val Genre: String?,

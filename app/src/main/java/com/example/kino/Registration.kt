@@ -75,7 +75,7 @@ class Registration : AppCompatActivity() {
                     Toast.makeText(baseContext, "Registration successful.", Toast.LENGTH_SHORT).show()
                     val user = auth.currentUser
                     // Navigate to the Homescreen
-                    val intent = Intent(this, Homescreen::class.java)
+                    val intent = Intent(this, Login::class.java)
                     startActivity(intent)
                     finishAffinity() // Clears the activity stack (Login, Register)
                 } else {

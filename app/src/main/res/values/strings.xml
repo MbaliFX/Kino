@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Kino</string>
     <string name="default_web_client_id">415389650899-l3sid82it58mp9t2e2bq945mtiaorjhr.apps.googleusercontent.com</string>
+
+    <!-- Add this line for the content description -->
+    <string name="movie_poster_description">Movie Poster</string>
 </resources>

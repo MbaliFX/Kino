@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 1. Change the root layout to a FrameLayout to allow layering -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -20,20 +19,21 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <!-- All your content is now inside here, and will appear on top of the tint -->
         <RelativeLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp">
 
+            <!-- The logo is now a button to the Homescreen -->
             <ImageView
                 android:id="@+id/logo"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/logo2" />
+                android:src="@drawable/logo2"
+                android:contentDescription="@string/app_name" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -43,36 +43,19 @@
             android:paddingStart="24dp"
             android:paddingEnd="24dp">
 
-            <SearchView
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/search_view"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/searchview_rounded_background"
-                android:iconifiedByDefault="false"
-                android:queryHint="Search for movies, series..." />
+                app:iconifiedByDefault="false"
+                app:queryHint="Search for movies, series..." />
         </RelativeLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="16dp"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/logoutdev"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Logout [dev mode]"
-            android:textColor="@color/white" />
-        <TextView
-            android:id="@+id/homedev"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="homescreen [dev mode]"
-            android:textColor="@color/white" />
-    </LinearLayout>
+    <!--
+    The LinearLayout containing the "dev mode" TextViews has been removed.
+    -->
 
 </FrameLayout>
