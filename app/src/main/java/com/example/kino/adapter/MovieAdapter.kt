@@ -14,7 +14,7 @@ class MovieAdapter(
 ) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val poster: ImageView = itemView.findViewById(R.id.moviePoster) // Ensure this ID exists in your item_movie.xml
+        val poster: ImageView = itemView.findViewById(R.id.moviePoster)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -29,7 +29,7 @@ class MovieAdapter(
         Glide.with(holder.itemView.context)
             .load(movie.poster)
             .placeholder(R.drawable.placeholder_image)
-            .error(R.drawable.placeholder_image) // Fallback for broken links
+            .error(R.drawable.placeholder_image)
             .into(holder.poster)
 
         holder.itemView.setOnClickListener { onClick(movie) }
@@ -37,8 +37,15 @@ class MovieAdapter(
 
     override fun getItemCount(): Int = movies.size
 
+
     fun updateMovies(newMovies: List<Movie>) {
         this.movies = newMovies
         notifyDataSetChanged()
+    }
+
+    fun addMovies(newMovies: List<Movie>) {
+        val oldSize = this.movies.size
+        this.movies = this.movies + newMovies // Append the new list to the old one
+        notifyItemRangeInserted(oldSize, newMovies.size) // More efficient than notifyDataSetChanged()
     }
 }
