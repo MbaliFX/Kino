@@ -147,6 +147,19 @@
                 android:textSize="16sp"
                 tools:text="Actor One, Actor Two, Actor Three" />
 
+            <TextView
+                android:id="@+id/detailCharactersTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:lineSpacingExtra="4dp"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:padding="4dp"
+                tools:text="Leonardo DiCaprio as Cobb\nJoseph Gordon-Levitt as Arthur" />
+
+
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

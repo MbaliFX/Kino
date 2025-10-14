@@ -44,7 +44,7 @@
                 android:layout_weight="1"
                 app:iconifiedByDefault="false"
                 app:queryHint="Search movies..."
-                app:searchIcon="@drawable/search_icon" />
+                 />
             <!-- The close icon will be handled programmatically -->
 
         </LinearLayout>
