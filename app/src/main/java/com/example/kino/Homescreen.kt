@@ -91,7 +91,11 @@ class Homescreen : AppCompatActivity() {
                 putExtra("movieYear", movie.year)
                 putExtra("moviePoster", movie.poster)
                 // Pass imdbID if it's available. OMDB search has it, TMDb popular does not.
-                movie.imdbID?.let { putExtra("imdbID", it) }
+                if (movie.imdbID != null) {
+                    putExtra("imdbID", movie.imdbID)
+                } else {
+                    putExtra("tmdbID", movie.tmdbId)
+                }
             }
             startActivity(intent)
         }
@@ -149,10 +153,15 @@ class Homescreen : AppCompatActivity() {
     // --- UPDATED: Data Loading Methods ---
 
     private fun loadPopularMovies(page: Int) {
-        if (isFetching) return // Don't fetch if a request is already in progress
+        if (isFetching) return
         isFetching = true
 
-        RetrofitInstance.tmdbApi.getPopularMovies(page = page).enqueue(object : Callback<TMDbResponse> {
+        val tmdbApiKey = "c8e980b95ae1bea670c408a20e65c4b4"
+
+        RetrofitInstance.tmdbApi.getPopularMovies(
+            apiKey = tmdbApiKey,
+            page = page
+        ).enqueue(object : Callback<TMDbResponse> {
             override fun onResponse(call: Call<TMDbResponse>, response: Response<TMDbResponse>) {
                 if (response.isSuccessful) {
                     val tmdbMovies = response.body()?.results ?: emptyList()
@@ -160,11 +169,11 @@ class Homescreen : AppCompatActivity() {
                         Movie(
                             title = tmdbMovie.title,
                             year = tmdbMovie.releaseDate.substringBefore("-"),
-                            imdbID = null, // TMDb doesn't provide an IMDb ID in this endpoint
-                            poster = tmdbMovie.getFullPosterUrl()
+                            imdbID = null,
+                            poster = tmdbMovie.getFullPosterUrl(),
+                            tmdbId = tmdbMovie.id
                         )
                     }
-                    // If it's the first page, replace the list. Otherwise, add to it.
                     if (page == 1) {
                         adapter.updateMovies(movies)
                     } else {
@@ -173,15 +182,16 @@ class Homescreen : AppCompatActivity() {
                 } else {
                     Log.e("KinoAPI", "TMDb API Error: ${response.code()}")
                 }
-                isFetching = false // Mark fetching as complete
+                isFetching = false
             }
 
             override fun onFailure(call: Call<TMDbResponse>, t: Throwable) {
                 Log.e("KinoAPI", "TMDb Network Failure: ${t.message}")
-                isFetching = false // Mark fetching as complete even on failure
+                isFetching = false
             }
         })
     }
+
 
     private fun searchOmdbMovies(query: String) {
         RetrofitInstance.omdbApi.searchMovies(query).enqueue(object : Callback<MovieResponse> {

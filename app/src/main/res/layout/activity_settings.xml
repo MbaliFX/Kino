@@ -1,126 +1,208 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@android:color/white"
     android:padding="16dp"
     tools:context=".Settings">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="32dp">
+        android:orientation="vertical">
 
-        <!-- Settings Title -->
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="settings"
-            android:textStyle="bold"
-            android:textSize="22sp"
-            android:paddingBottom="4dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="16dp">
 
-        <!-- Welcome Message (below Settings) -->
-        <TextView
-            android:id="@+id/txtWelcome"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/logo_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/logo2"
+                android:contentDescription="@string/app_name"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Settings"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:paddingStart="16dp" />
+        </LinearLayout>
+
+        <!-- User Info Section -->
+
+        <!-- Preferences Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="welcome"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:paddingBottom="16dp" />
+            android:layout_marginTop="16dp"
+            android:background="@drawable/section_background"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <!-- 1. Dark Mode Toggle -->
-        <Switch
-            android:id="@+id/switchDarkMode"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="User Info"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Full Name (non-editable) -->
+            <TextView
+                android:id="@+id/textFullName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:padding="8dp"
+                android:text="Full Name"
+                android:textColor="@android:color/black" />
+
+            <!-- Current Username -->
+            <TextView
+                android:id="@+id/textUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:padding="8dp"
+                android:text="Current Username"
+                android:textColor="@android:color/black" />
+
+            <!-- Current Email -->
+
+            <!-- Editable fields to update -->
+            <TextView
+                android:id="@+id/textEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:padding="8dp"
+                android:text="user@example.com"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/editUsername"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:background="@android:drawable/editbox_background"
+                android:hint="Change Username"
+                android:padding="8dp" />
+
+            <EditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:background="@android:drawable/editbox_background"
+                android:hint="Change Email"
+                android:padding="8dp" />
+
+            <Button
+                android:id="@+id/btnUpdateUserInfo"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/black"
+                android:text="Update Info"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/editPassword"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:background="@android:drawable/editbox_background"
+                android:hint="Change Password"
+                android:inputType="textPassword"
+                android:padding="8dp" />
+
+            <Button
+                android:id="@+id/btnChangePassword"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/black"
+                android:text="Change Password"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:minHeight="48dp"
-            android:padding="8dp"
-            android:text="enable_dark_mode"
-            tools:ignore="UseSwitchCompatOrMaterialXml,VisualLintButtonSize" />
-
-        <!-- 2. Notification Toggle -->
-        <Switch
-            android:id="@+id/switchNotifications"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:minHeight="48dp"
-            android:padding="8dp"
-            android:text="enable notifications"
-            tools:ignore="UseSwitchCompatOrMaterialXml,VisualLintButtonSize" />
-
-        <!-- 3. Change Username -->
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="change username"
-            android:paddingTop="16dp" />
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@drawable/section_background"
+            android:layout_marginTop="16dp">
 
-        <EditText
-            android:id="@+id/editUsername"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:minHeight="48dp"
-            android:hint="enter your name"
-            android:padding="8dp"
-            android:background="@android:drawable/editbox_background"
-            tools:ignore="Autofill,TextFields,VisualLintTextFieldSize" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Preferences"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingBottom="8dp" />
 
-        <Button
-            android:id="@+id/btnSaveUsername"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:minHeight="48dp"
-            android:text="save username"
-            android:backgroundTint="@color/black"
-            android:textColor="@color/white"
-            android:layout_marginTop="8dp"
-            tools:ignore="VisualLintButtonSize" />
+            <Switch
+                android:id="@+id/switchDarkMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dark Mode"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp" />
 
-        <!-- 4. Language Selection -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="select language"
-            android:paddingTop="16dp" />
+            <Switch
+                android:id="@+id/switchNotifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enable Notifications"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp" />
 
-        <Spinner
-            android:id="@+id/spinnerLanguage"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:minHeight="48dp"
-            android:layout_marginBottom="8dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Application Language"
+                android:paddingTop="8dp"
+                android:paddingBottom="4dp" />
 
-        <!-- 5. Clear Data Button -->
+            <Spinner
+                android:id="@+id/spinnerLanguage"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp" />
+        </LinearLayout>
+
+        <!-- Bottom Buttons -->
         <Button
             android:id="@+id/btnClearData"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:minHeight="48dp"
-            android:layout_marginTop="8dp"
+            android:text="Clear App Data"
             android:backgroundTint="@color/black"
-            android:text="clear app data"
             android:textColor="@color/white"
-            tools:ignore="VisualLintButtonSize" />
+            android:layout_marginTop="16dp" />
 
-        <!-- 6. Logout Button -->
         <Button
             android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:minHeight="48dp"
-            android:text="logout"
-            android:backgroundTint="@color/black"
+            android:text="Logout"
+            android:backgroundTint="@color/blue"
             android:textColor="@color/white"
-            android:layout_marginTop="16dp"
-            tools:ignore="VisualLintButtonSize" />
+            android:layout_marginTop="8dp" />
 
     </LinearLayout>
 </ScrollView>

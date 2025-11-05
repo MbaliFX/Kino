@@ -1,3 +1,11 @@
+import java.util.Properties
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -17,6 +25,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "YOUTUBE_API_KEY", "\"${localProperties.getProperty("YOUTUBE_API_KEY", "")}\"")
     }
 
     buildTypes {
@@ -41,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -52,6 +62,7 @@ dependencies {
     implementation(libs.googleid)
     implementation(libs.firebase.database)
     implementation(libs.play.services.auth)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -60,4 +71,9 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.github.bumptech.glide:glide:4.15.1")
+
+    //firebase
+    implementation("com.google.firebase:firebase-auth:22.1.1")
+    implementation("com.google.firebase:firebase-firestore:24.7.0")
+    implementation("com.google.firebase:firebase-analytics:21.3.0")
 }

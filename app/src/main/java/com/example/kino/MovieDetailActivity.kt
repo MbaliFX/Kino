@@ -2,6 +2,9 @@ package com.example.kino
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -14,8 +17,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.Locale
+import android.webkit.WebView
+import android.webkit.WebViewClient
 
 class MovieDetailActivity : AppCompatActivity() {
+
+    private lateinit var trailerButton: Button
+    private lateinit var trailerContainer: FrameLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,17 +39,37 @@ class MovieDetailActivity : AppCompatActivity() {
         val typeTextView: TextView = findViewById(R.id.detailTypeTextView)
         val actorsTextView: TextView = findViewById(R.id.detailActorsTextView)
         val charactersTextView: TextView = findViewById(R.id.detailCharactersTextView)
+        trailerButton = findViewById(R.id.trailerButton)
+        trailerContainer = findViewById(R.id.trailerContainer)
 
         // Get intent extras
         val movieTitle = intent.getStringExtra("movieTitle")
         val movieYear = intent.getStringExtra("movieYear")
         val moviePoster = intent.getStringExtra("moviePoster")
         val imdbID = intent.getStringExtra("imdbID")
+        val trailerYouTubeId = intent.getStringExtra("trailerYouTubeId") // pass YouTube ID if available
 
         // Set initial UI values
         titleTextView.text = movieTitle
         yearTextView.text = movieYear
         Glide.with(this).load(moviePoster).into(posterImageView)
+
+        // Setup trailer button click
+        trailerButton.setOnClickListener {
+            trailerButton.visibility = View.GONE
+            trailerContainer.visibility = View.VISIBLE
+            if (!trailerYouTubeId.isNullOrEmpty()) {
+                showYouTubeTrailer(trailerYouTubeId)
+            } else {
+                // Show a placeholder or error if no trailer available
+                val placeholder = TextView(this).apply {
+                    text = "Trailer not available"
+                    textSize = 16f
+                    setPadding(16, 16, 16, 16)
+                }
+                trailerContainer.addView(placeholder)
+            }
+        }
 
         if (imdbID != null) {
             fetchMovieDetails(
@@ -59,8 +87,26 @@ class MovieDetailActivity : AppCompatActivity() {
             directorTextView.text = ""
             typeTextView.text = ""
             actorsTextView.text = ""
-            //charactersTextView.text = ""
         }
+    }
+
+    private fun showYouTubeTrailer(videoId: String) {
+        // Using a WebView to embed YouTube trailer
+        val webView = WebView(this)
+        webView.settings.javaScriptEnabled = true
+        webView.webViewClient = WebViewClient()
+        val html = """
+            <html>
+            <body style="margin:0;padding:0;">
+            <iframe width="100%" height="100%" 
+                src="https://www.youtube.com/embed/$videoId?autoplay=1" 
+                frameborder="0" allowfullscreen>
+            </iframe>
+            </body>
+            </html>
+        """.trimIndent()
+        webView.loadData(html, "text/html", "utf-8")
+        trailerContainer.addView(webView)
     }
 
     private fun fetchMovieDetails(
