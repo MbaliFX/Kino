@@ -75,6 +75,7 @@
                     android:textStyle="bold"
                     android:textAllCaps="true"
                     tools:text="Movie" />
+
             </LinearLayout>
 
             <TextView

@@ -85,17 +85,13 @@ class Homescreen : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         // We use a lambda to pass the onClick action to the adapter.
-        adapter = MovieAdapter(emptyList()) { movie ->
+        adapter = MovieAdapter(mutableListOf()) { movie ->
             val intent = Intent(this, MovieDetailActivity::class.java).apply {
                 putExtra("movieTitle", movie.title)
                 putExtra("movieYear", movie.year)
                 putExtra("moviePoster", movie.poster)
-                // Pass imdbID if it's available. OMDB search has it, TMDb popular does not.
-                if (movie.imdbID != null) {
-                    putExtra("imdbID", movie.imdbID)
-                } else {
-                    putExtra("tmdbID", movie.tmdbId)
-                }
+                putExtra("imdbID", movie.imdbID)
+                putExtra("tmdbID", movie.tmdbId)
             }
             startActivity(intent)
         }
