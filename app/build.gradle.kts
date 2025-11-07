@@ -67,6 +67,7 @@ dependencies {
 
     // YouTube Player
     implementation(libs.youtube.player)
+    implementation(libs.androidx.activity)
 
     // Testing
     testImplementation(libs.junit)

@@ -13,43 +13,39 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kino"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="28">
+        <activity
+            android:name=".WatchlistActivity"
+            android:exported="false" />
+        <!-- All your activities are declared here. -->
+        <activity
+            android:name=".MovieDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ForgotPassword"
+            android:exported="false" />
+        <activity
+            android:name=".Settings"
+            android:exported="false" />
+        <activity
+            android:name=".Homescreen"
+            android:exported="false" />
+        <activity
+            android:name=".SearchScreen"
+            android:exported="false" />
+        <activity
+            android:name=".Login"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-    android:usesCleartextTraffic="true"
-    tools:targetApi="28">
-
-    <!-- All your activities are declared here. -->
-    <activity
-        android:name=".MovieDetailActivity"
-        android:exported="false" />
-    <activity
-        android:name=".ForgotPassword"
-        android:exported="false" />
-    <activity
-        android:name=".Settings"
-        android:exported="false" />
-    <activity
-        android:name=".Homescreen"
-        android:exported="false" />
-    <activity
-        android:name=".SearchScreen"
-        android:exported="false" />
-
-    <activity
-        android:name=".Login"
-        android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-
-    <activity
-        android:name=".Registration"
-        android:exported="false" />
-
-</application>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Registration"
+            android:exported="false" />
+    </application>
 
 </manifest>
-
-
-
